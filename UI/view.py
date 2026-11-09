@@ -36,13 +36,40 @@ class View:
         self.txt_titolo = ft.Text(value="Biblioteche di Torino", size=38, weight=ft.FontWeight.BOLD)
 
         # --- Sezione 2: Filtraggio ---
-        # TODO
+        #menu a tendina per la selezione della biblioteca
+        self.dd_biblioteche = ft.Dropdown(
+            label="Seleziona Biblioteca",
+            width=350
+        )
+
+        self.dd_generi = ft.Dropdown(
+            label="Seleziona Genere",
+            width=350
+        )
 
         # Sezione 3: Libri
-        # TODO
+        #pulsante per attivare il recupero dei libri filtrati
+        pulsante_mostra_libri=ft.Button(
+            "Mostra libri",
+            on_click=self.controller.handle_mostra_libri if self.controller else None
+        )
+
+        #contenitore ListView per mostrare i libri trovati dal database
+        self.lv_libri=ft.ListView(
+            expand=False,
+            height=250,
+            spacing=5,
+            padding=10,
+            auto_scroll=True
+        )
 
         # --- Toggle Tema ---
         self.toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=self.cambia_tema)
+
+
+        #popolamento iniziale dei Dropdown tramite il Controller
+        if self.controller:
+            self.controller.popola_dropdown()
 
         # --- Layout della pagina ---
         self.page.add(
@@ -53,10 +80,16 @@ class View:
             ft.Divider(),
 
             # Sezione 2: Filtraggio
-            # TODO
+            ft.Text("Seleziona filtri di ricerca", size=20, weight=ft.FontWeight.BOLD),
+            ft.Row(
+                controls=[self.dd_biblioteche, self.dd_generi],
+                alignment=ft.MainAxisAlignment.CENTER
+            ),
+            ft.Divider(),
 
             # Sezione 3: Libri
-            # TODO
+            pulsante_mostra_libri,
+            self.lv_libri
         )
 
         self.page.scroll = "adaptive"
